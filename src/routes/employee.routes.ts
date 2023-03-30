@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { deleteController, employeePagination, findAll, findEmployeeByPk, saveController, statisticsController } from '../controllers/employee.controller'
+import { deleteController, employeePagination, findAll, findEmployeeByPk, saveController, statisticsController, updateEmployeeController } from '../controllers/employee.controller'
 
 export const router = Router()
 
@@ -15,6 +15,9 @@ router.get('/api/v1/employees/', findAll)
 
 /** save one employee in the database */
 router.post('/api/v1/employees/', saveController)
+
+
+router.put('/api/v1/employees/:pk/', updateEmployeeController)
 
 
 /** get single record in the database */

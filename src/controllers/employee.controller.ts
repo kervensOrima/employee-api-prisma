@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { ApiResponseError, ApiResponseSuccess } from "../config/script"
-import { deleteEmployee, findByPk, findMany, findManyByStatus, save, statistics } from "../services/employee.service"
+import { deleteEmployee, findByPk, findMany, findManyByStatus, save, statistics, updateService } from "../services/employee.service"
 import { Status, ContractType } from '@prisma/client'
 
 
@@ -44,7 +44,6 @@ export const saveController = (req: Request, resp: Response) => {
             return resp.status(500).json(
                 ApiResponseError(message, 500, false, err)
             )
-
         })
 }
 
@@ -103,6 +102,27 @@ export const employeePagination = (req: Request, resp: Response) => {
             return resp.status(500).json(ApiResponseError('error occuring while loading employee', 500, false, err))
         })
 
+}
+
+
+
+export const updateEmployeeController = (req: Request, resp: Response) => {
+    const { address, phones, ...emp } = req.body
+    const employee_pk = req.params.pk
+
+    updateService({ ...emp, phones: { connectOrCreate: phones }, address: { connectOrCreate: address } }, Number(employee_pk))
+        .then(emp => {
+            const message = `employee update successfully in the database`
+            return resp.json(
+                ApiResponseSuccess(message, 200, true, emp)
+            )
+        })
+        .catch(err => {
+            const message = `error occured while saving employee in the database`
+            return resp.status(500).json(
+                ApiResponseError(message, 500, false, err)
+            )
+        })
 }
 
 

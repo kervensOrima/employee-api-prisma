@@ -64,6 +64,25 @@ export const findManyByStatus = (status: any, contract: any, page: number, limit
 }
 
 
+export const updateService = (employeeDTO: any, pk: number) => {
+    try {
+        findByPk(pk)
+
+        /**  update the employee */
+        return prisma.employee.update({
+            data: employeeDTO,
+            
+            where: {
+                employee_pk: pk
+            }
+        })
+    } catch (err) {
+        throw new Error('Error while updating employee')
+    }
+
+}
+
+
 export const statistics = async () => {
     /*** get the statistics for the status */
     const status_statistics = await prisma.employee.groupBy({
